@@ -1,0 +1,664 @@
+* {
+    padding   : 0;
+    margin    : 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family          : "Lato", sans-serif;
+    font-weight          : 400;
+    font-size            : 16px;
+    line-height          : 1.7;
+    color                : #777;
+    background-image     : radial-gradient(#8fd3f4, #84fab0), url('shapes.png');
+    background-blend-mode: multiply;
+}
+
+/*--------------------TO REMOVE BLUE SELECTION BOX (APPEARS ON MOBILE DEVICES) FOR BUTTONS & OTHER ELEMENTS-------------------------*/
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/*-------------------------------------------------------------------------------------------------------------*/
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select  : none;
+    /* Safari */
+    -khtml-user-select   : none;
+    /* Konqueror HTML */
+    -moz-user-select     : none;
+    /* Firefox */
+    -ms-user-select      : none;
+    /* Internet Explorer/Edge */
+    user-select          : none;
+    /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+/*-----------------------------------------------TO REMOVE OUTLINE WHEN SELECTED----------------------------*/
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+.top_bg {
+    background-image: url(top_bg.svg);
+    background-size : cover;
+    background-color: #8ade52;
+    height          : fit-content;
+    z-index         : 0;
+    position        : relative;
+}
+
+.top_bg ul {
+    list-style-type : none;
+    margin          : 0;
+    padding         : 0;
+    overflow        : hidden;
+    background-color: #1f1f1f;
+    box-shadow      : 0 0.1vmax 1vmax 0px #000000a3;
+    font-size       : 1.3vmax;
+}
+
+.top_bg ul li {
+    float        : right;
+    margin-left  : 1vw;
+    margin-top   : 0.7vmax;
+    margin-bottom: 0.4vmax;
+}
+
+.top_bg ul li:first-child {
+    margin-right: 2vw;
+}
+
+.top_bg ul li:last-child {
+    float        : left;
+    margin-left  : 10vw;
+    margin-top   : 1.1vmax;
+    margin-bottom: 0vmax;
+}
+
+.top_bg ul li h3 {
+    font-family   : "Lato", sans-serif;
+    font-weight   : 400;
+    letter-spacing: 0.4vw;
+    color         : #ebc944;
+    transform     : translateY(-15%);
+    line-height   : initial;
+    font-size     : 2.7vw;
+}
+
+.top_bg ul li a {
+    display         : block;
+    color           : #C997C0;
+    text-align      : center;
+    padding         : 1vmax;
+    padding-bottom  : 0.3vmax;
+    padding-top     : 0.3vmax;
+    border-radius   : 2vmax;
+    text-decoration : none;
+    background-color: #242424;
+}
+
+.top_bg ul li a.active {
+    background-color: #ebc944;
+    color           : rgb(1, 17, 32);
+}
+
+.top_bg ul li a.active:hover {
+    background-color: #ebc944;
+    color           : rgb(1, 17, 32);
+}
+
+.top_bg ul li a:hover {
+    background-color: rgb(1, 17, 32);
+    color           : white;
+}
+
+.gallery_bg {
+    height          : 100vh;
+    width           : 100%;
+    background-color: #04AA6D;
+}
+
+.card {
+    position             : relative;
+    height               : 22vmax;
+    width                : 19vmax;
+    margin               : 0.5vmax;
+    /*background-color     : white;*/
+    border-radius        : 1.5vmax;
+    /*background-image     : radial-gradient(#e5f89e, #96e001), url(spikes.png);
+    background-blend-mode: multiply;
+    background-size      : cover;
+    box-shadow           : 0.3vmax 0.6vmax 1vmax #0000004d;*/
+    transition           : all 0.5s;
+}
+
+
+.card:hover .card_img {
+    max-height      : 106%;
+    transform-origin: center center;
+    transition      : all 0.5s;
+    animation       : normal;
+}
+
+.card_disable {
+    cursor        : wait;
+    pointer-events: none;
+}
+
+.card_enabled {
+    cursor        : default;
+    pointer-events: all;
+}
+
+.card_text {
+    justify-content: center;
+    margin-left: 6vmax;
+    position: absolute;
+    writing-mode: vertical-rl;
+    font-size: 5vmax;
+    color: #9ade0d8c;
+}
+
+.stage {
+    background-color: #de5656;
+    width           : 100%;
+    height          : 100%;
+    position        : absolute;
+    clip-path       : polygon(15% 80%, 85% 80%, 100% 100%, 0px 100%);
+    background      : radial-gradient(#e5f89e, #96e001);
+    margin-top      : -1vmax;
+}
+
+.stageBottom {
+    font-size: 0.7vmax;
+    text-align: center;
+    background-color: yellow;
+    height          : 1vmax;
+    margin-top      : 110%;
+    width           : 100%;
+    position        : absolute;
+    z-index         : -1;
+}
+
+.card_img {
+    position   : absolute;
+    width      : initial;
+    max-height : 100%;
+    margin-left: 50%;
+    transition : all 0.5s;
+    transform  : translateX(-50%);
+}
+
+.loading_img {
+    position   : absolute;
+    max-height : 100%;
+    margin-left: 50%;
+    margin-top : 50%;
+    transform  : translate(-50%, -50%);
+    width      : 40%;
+}
+
+.flex_gallery {
+    display         : flex;
+    flex-wrap       : wrap;
+    justify-content : center;
+    background-color: transparent;
+    padding-top     : 2%;
+    padding-bottom  : 2%;
+}
+
+.hide {
+    display: none;
+}
+
+.page_no {
+    display        : flex;
+    justify-content: center;
+    padding-top    : 1%;
+    padding-bottom : 1%;
+    background     : #101010;
+}
+
+.pgNo_style {
+    background-color: rgb(34, 34, 34);
+    color           : white;
+    text-decoration : none;
+    padding-left    : 1.1vmax;
+    padding-right   : 1.1vmax;
+    padding-top     : 0.4vmax;
+    padding-bottom  : 0.4vmax;
+    border-radius   : 5vmax;
+    font-size       : 1.2vmax;
+    margin-right    : 0.4vmax;
+}
+
+.active {
+    background-color: rgb(139, 145, 230);
+    color           : rgb(20, 20, 20);
+}
+
+
+.product_info {
+    position: absolute;
+    z-index : 1;
+}
+
+.product_float {
+    height          : 100vh;
+    width           : 100%;
+    background-color: rgba(0, 0, 0, 0.841);
+    position        : fixed;
+    z-index         : -1;
+}
+
+.prod_container {
+    position             : relative;
+    height               : fit-content;
+    width                : 90%;
+    background-color     : white;
+    background-image     : linear-gradient(#85dcff, #85dcff), url(shapes.png);
+    background-blend-mode: multiply;
+    margin-top           : 8vh;
+    margin-left          : 4vw;
+    margin-bottom        : 2vmax;
+    padding-bottom       : 2vmax;
+    border-radius        : 2vmax;
+    z-index              : 1
+}
+
+.cancle_btn {
+    height   : 4vmax;
+    width    : auto;
+    float    : right;
+    transform: translate(50%, -50%);
+}
+
+.cancle_btn:hover #outCir {
+    fill: #a00505;
+}
+
+.prod_img {
+    position   : relative;
+    height     : 40vh;
+    width      : auto;
+    margin-left: 45vw;
+    margin-top : 0.5%;
+    transform  : translateX(-50%);
+}
+
+.prod_desc {
+    padding-right: 1vmax;
+    padding-left : 1vmax;
+    text-align   : center;
+    font-size    : 1.4vmax;
+}
+
+.clothes_size {
+    display         : inline-block;
+    height          : 3.5vmax;
+    width           : 3.5vmax;
+    border-radius   : 105vmax;
+    border          : 0.2vmax solid #191919;
+    font-size       : 1.2vmax;
+    font-weight     : 600;
+    color           : #929292;
+    font-family     : 'Lato', sans-serif;
+    background-color: #2b2b2b
+}
+
+.clothes_size:hover {
+    color : white;
+    border: 0.2vmax solid white;
+}
+
+.size_active {
+    color           : #ebc944;
+    border          : 0.2vmax solid #ebc944;
+    background-color: #420000;
+}
+
+#order {
+    position     : absolute;
+    display      : block;
+    margin-top   : 1.5vmax;
+    background   : #1f1f1f;
+    height       : 4vmax;
+    width        : fit-content;
+    border-radius: 1vmax;
+    border       : none;
+    cursor       : pointer;
+}
+
+.order_txt {
+    display      : block;
+    border-radius: 1vmax;
+    background   : #383838;
+    transform    : translateY(-.4vmax);
+    width        : fit-content;
+    height       : 4vmax;
+    padding      : 1vmax;
+    color        : #efd469;
+    font-size    : 2vmax;
+}
+
+#order:active .order_txt {
+    transform: translateY(-.1vmax);
+}
+
+.toggleBtn {
+    background-color: #3a3939;
+    color           : #9e9e9e;
+    border          : none;
+    padding         : 0.5vmax;
+    margin-bottom   : 0.3vmax;
+    font-size       : 1.5vmax;
+}
+
+.toggleActive {
+    background-color: #04AA6D;
+    color           : white;
+    border-radius   : 1.2vmax 0 0 1.2vmax;
+}
+
+#old {
+    border-radius: 1.2vmax 0 0 1.2vmax;
+}
+
+#new {
+    border-radius: 0 1.2vmax 1.2vmax 0;
+}
+
+.sorting_container {
+    background-color: #1d1d1d;
+    width           : fit-content;
+    padding-right   : 3%;
+    padding-left    : 3%;
+    padding-bottom  : 1%;
+    margin-left     : 50%;
+    border          : none;
+    transform       : translateX(-50%);
+    border-radius   : 0vmax 0 2vmax 2vmax;
+}
+
+
+
+
+.footer {
+    height          : 10vmax;
+    width           : 100%;
+    background-color: rgb(22, 22, 22);
+}
+
+.logo_img {
+    height : inherit;
+    padding: 1vmax;
+    float  : left;
+}
+
+.brand_name {
+    margin-top: 5vmax;
+    transform : translateY(-50%);
+    display   : inline-block;
+    font-size : 5vmax;
+    color     : #525252;
+}
+
+.divider {
+    position        : absolute;
+    display         : inline-block;
+    height          : 8vmax;
+    width           : 0.3vmax;
+    margin-top      : 0.4vmax;
+    margin-left     : 1vmax;
+    background-color: white;
+    vertical-align  : top;
+}
+
+.footer_nav {
+    font-size     : 1.1vmax;
+    display       : inline-block;
+    margin-top    : 0.6vmax;
+    vertical-align: top;
+}
+
+.footer_nav li a {
+    color          : #525252;
+    text-decoration: none;
+}
+
+/*------------------------------------ORDER MENU----------------------------------------*/
+
+.order_menu {
+    position: absolute;
+    z-index : 1;
+}
+
+.order_float {
+    height          : 100vh;
+    width           : 100%;
+    background-color: rgba(0, 0, 0, 0.841);
+    position        : fixed;
+    z-index         : -1;
+}
+
+.order_contailer {
+    position             : relative;
+    height               : fit-content;
+    width                : 91vw;
+    background-color     : white;
+    background-image     : linear-gradient(#85dcff, #85dcff), url(shapes.png);
+    background-blend-mode: multiply;
+    margin-top           : 8vh;
+    margin-left          : 4vw;
+    border-radius        : 2vmax;
+    z-index              : 1
+}
+
+.order_cancle_btn {
+    height   : 4vmax;
+    width    : auto;
+    float    : right;
+    z-index  : 2;
+    position : relative;
+    transform: translate(50%, -50%);
+}
+
+.order_cancle_btn:hover #outCir {
+    fill: #a00505;
+}
+
+.order_img {
+    position   : relative;
+    height     : 40vh;
+    width      : auto;
+    margin-left: 45vw;
+    margin-top : 0.5%;
+    transform  : translateX(-50%);
+}
+
+.orderFinalStyle {
+    display         : inline-block;
+    background-color: rgb(0, 70, 36);
+    color           : white;
+    width           : fit-content;
+    height          : 3.5vmax;
+    border          : none;
+    margin-left     : 0.3vmax;
+    border-radius   : 0.7vmax 0.7vmax 0.7vmax 0.7vmax;
+}
+
+.orderFinalText {
+    height          : 3.5vmax;
+    background-color: rgb(2, 165, 86);
+    padding         : 1vmax;
+    border-radius   : 0.7vmax 0.7vmax 0.7vmax 0.7vmax;
+    border          : none;
+    font-size       : 1.7vmax;
+    transform       : translateY(-0.4vmax);
+}
+
+.orderFinalImg {
+    height        : 3.5vmax;
+    padding       : 0.5vmax;
+    transform     : translateY(-0.9vmax);
+    vertical-align: text-top;
+    transition    : all 0.5s;
+}
+
+#whatsappBtn:hover #whatsappText {
+    transform: translateY(-0.5vmax);
+}
+
+#whatsappBtn:hover .orderFinalImg {
+    padding   : 0vmax;
+    transform : translateY(-1.6vmax);
+    transition: all 0.5s;
+}
+
+#whatsappBtn:active #whatsappText {
+    transform: translateY(-0.1vmax);
+}
+
+#mailBtn:hover #mailText {
+    transform: translateY(-0.5vmax);
+}
+
+#mailBtn:active #mailText {
+    transform: translateY(-0.1vmax);
+}
+
+#mailBtn:hover .orderFinalImg {
+    padding   : 0vmax;
+    transform : translateY(-1.6vmax);
+    transition: all 0.5s;
+}
+
+.btnCopyStyle {
+    background-color: rgb(26, 26, 26);
+    border          : none;
+    color           : #ebc944;
+    padding         : 0.7vmax 0.8vmax;
+    font-size       : 1.5vmax;
+    cursor          : pointer;
+    margin-left     : 50%;
+    transform       : translateX(-50%);
+    margin-bottom   : 0.5vmax;
+    margin-top      : 0.5vmax;
+}
+
+.btnCopyStyle:hover {
+    background-color: rgb(14, 14, 14);
+    color           : #ffdf60;
+}
+
+.howTo {
+    font-size       : 1.5vmax;
+    padding-left    : 1.5vmax;
+    padding-right   : 0.5vmax;
+    background-color: black;
+    border-radius   : 0 0 2vmax 2vmax;
+    padding-bottom  : 1vmax;
+    padding-top     : 1vmax;
+    text-align      : center;
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------USERNAME MENU-------------------------------------------------------------*/
+
+.userBox {
+    height          : 100vh;
+    width           : 100%;
+    background-color: rgba(0, 0, 0, 0.841);
+    position        : fixed;
+    z-index         : 2;
+}
+
+.userContainer {
+    position   : absolute;
+    margin-left: 50%;
+    margin-top : 40vh;
+    opacity    : 0.5;
+    transform  : translate(-50%, -50%);
+}
+
+#lottieStyle {
+    width      : 20vmax;
+    margin-left: 50%;
+    transform  : translate(-50%, 8%);
+    z-index    : -1;
+    position   : relative;
+}
+
+.userInput {
+    background-color: white;
+    width           : fit-content;
+    padding         : 1vmax;
+    border-radius   : 1vmax;
+}
+
+#userName {
+    font-size        : 2.5vmax;
+    display          : block;
+    padding          : 0.6vmax;
+    background-color : #d4d4d4;
+    border-radius    : 100px;
+    border           : none;
+    -webkit-highlight: none;
+    text-align       : center;
+    transition       : all 0.5s;
+}
+
+#userName:focus {
+    background-color: #161616;
+    color           : white;
+    transition      : all 0.5s;
+}
+
+#okBtn {
+    font-size       : 2.5vmax;
+    height          : 4vmax;
+    width           : 10vmax;
+    border-radius   : 100px;
+    margin-left     : 0.8vmax;
+    border          : none;
+    background-color: rgb(144, 238, 144);
+    transition      : all 0.5s;
+}
+
+#cancleBtn {
+    font-size       : 2.5vmax;
+    height          : 4vmax;
+    width           : 10vmax;
+    border-radius   : 100px;
+    border          : none;
+    background-color: rgb(233, 90, 90);
+    transition      : all 0.5s;
+}
+
+#cancleBtn:hover {
+    background-color: rgb(180, 30, 30);
+    color           : white;
+    transition      : all 0.5s;
+}
+
+#okBtn:hover {
+    background-color: rgb(64, 126, 64);
+    color           : white;
+    transition      : all 0.5s;
+}
+
+
+/*----------------------------------------------------------------------------------------------------------------*/

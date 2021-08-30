@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920.039" height="603.356" viewBox="0 0 1920.039 603.356">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.521" y1="0.103" x2="0" y2="0.083" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#bfe482"/>
+      <stop offset="1" stop-color="#8ade52"/>
+    </linearGradient>
+  </defs>
+  <g id="top_bg" transform="translate(0.039 0.356)">
+    <g id="Rectangle_2" data-name="Rectangle 2" fill="url(#linear-gradient)">
+      <rect width="1920" height="603" rx="3" stroke="none"/>
+      <rect x="0.5" y="0.5" width="1919" height="602" rx="2.5" fill="none"/>
+    </g>
+    <g id="STROKE4">
+      <path id="Path_1" data-name="Path 1" d="M18.325-.356S229.573,300.211,726.982,120.673,1131.41,31.375,1193.94.57c-106.956-1.2-83,.112-216.315,0C840.043,25.489,832.939,52.978,644.571,97.127s-377.6,64-542.418-97.483" fill="#bfe482"/>
+      <path id="Path_2" data-name="Path 2" d="M3,5.886S197.2,347.3,741.7,155.992,1509.886,197.2,1509.886,197.2l-29.432,58.865S1262.653,8.83,782.9,217.8C518.012,320.814,126.673,309.041,3,97.127,2.943,32.376,3,5.886,3,5.886Z" transform="translate(-3 21)" fill="#bfe482"/>
+      <path id="Path_3" data-name="Path 3" d="M3,220.744C5.886,226.63,306.1,373.792,724.039,285.5S1062.513,153.049,1197.9,173.652c-2.943,64.751,0,111.843,0,111.843s-117.73-91.241-444.43,64.751C509.182,412.055,117.843,347.3,3,270.779" transform="translate(-3 21)" fill="#bfe482"/>
+      <path id="Path_4" data-name="Path 4" d="M3,582s97.07-134.626,308.984-102.251S679.89,570.99,968.329,512.125s367.906-194.254,367.906-194.254l35.319,47.092S1150.81,562.16,897.691,559.217c-235.46,23.546-362.02,8.83-556.274-26.489S76.524,582,76.524,582Z" transform="translate(-3 21)" fill="#bfe482"/>
+      <path id="Path_5" data-name="Path 5" d="M2.975,494.466s150.074-88.3,547.413-14.716c264.892,26.489,665.174-108.9,665.174-108.9V323.757s-276.665,108.9-570.99,117.73C347.3,400.282,55.985,415,2.975,347.3,2.943,429.714,2.975,494.466,2.975,494.466Z" transform="translate(-3 21)" fill="#bfe482"/>
+    </g>
+  </g>
+</svg>

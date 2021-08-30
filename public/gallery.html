@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900">
+  <link rel="stylesheet" href="gallery_styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>IMRARE</title>
+</head>
+
+<body>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-storage.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <script>
+    var counter = 0;
+    var fobj = {}; //Firebase object
+    var img1 = document.getElementsByClassName("img_1");
+    var img2 = document.getElementsByClassName("img_2");
+    var lessThen12 = false; // 12 because there are 12 cards per page
+    var currentPage = 0;
+    var orderBtn = "none";//this is used to store which btn is finally choosen by the user (whatsapp or mail)
+
+    var linkArrays = [];// stores all the image links
+    var nameArrays = [];// stores all the dress names
+    var descArray = [];
+    var ogLinkArrays = [];
+    var ogNameArrays = [];
+    var ogDescArray = [];
+    var revLinkArrays = [];
+    var revNameArrays = [];
+    var revDescArray = [];
+
+
+    //--------------------------FIREBASE CONFIGURATION---------------------
+    var firebaseConfig = {
+      apiKey: "AIzaSyDfu0YBWgwoK0FDBUikNS2uYs-rPVmSYR4",
+      authDomain: "websitetest2-39bef.firebaseapp.com",
+      projectId: "websitetest2-39bef",
+      storageBucket: "websitetest2-39bef.appspot.com",
+      messagingSenderId: "1060279493960",
+      appId: "1:1060279493960:web:099a28f2d7131ea8103f7d",
+      measurementId: "G-0HQVXB64MN"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    //-----------------------------------------------------------------------
+
+    //-------------------------FIREBASE DATA RETRIVAL------------------------
+
+    firebase.database().ref('Pictures').on('value', function (snapshot) {
+      fobj = snapshot.val();
+      var top3 = snapshot.val().count.top3;
+      top3Array = top3.split(" ");
+      ogLinkArrays = Object.keys(fobj).map(function (keys) {
+        return fobj[keys].link;
+      });
+      ogNameArrays = Object.keys(fobj).map((keys) => {
+        return fobj[keys].name;
+      });
+      ogDescArray = Object.keys(fobj).map((keys) => {
+        return fobj[keys].desc;
+      });
+      linkArrays = Array.from(ogLinkArrays);
+      nameArrays = Array.from(ogNameArrays);
+      descArray = Array.from(ogDescArray);
+      setPgNo((linkArrays.length - 1));
+      addSrcToImg();
+      createRevArrays();
+      enableCards();
+    });
+
+    //------------------------------------------------------------------------
+
+    function enableCards() {
+      for (var i = 1; i <= 12; i++) {
+        var cardId = "#cid" + i;
+        jQuery(cardId).removeClass("card_disable");
+        jQuery(cardId).addClass("card_enabled");
+      }
+    }
+
+    // this function is only called at page load and in the filters(new First, old first)
+    function addSrcToImg() {
+      jQuery("#id1").attr('src', linkArrays[0]);
+      jQuery("#id2").attr('src', linkArrays[1]);
+      jQuery("#id3").attr('src', linkArrays[2]);
+      jQuery("#id4").attr('src', linkArrays[3]);
+      jQuery("#id5").attr('src', linkArrays[4]);
+      jQuery("#id6").attr('src', linkArrays[5]);
+      jQuery("#id7").attr('src', linkArrays[6]);
+      jQuery("#id8").attr('src', linkArrays[7]);
+      jQuery("#id9").attr('src', linkArrays[8]);
+      jQuery("#id10").attr('src', linkArrays[9]);
+      jQuery("#id11").attr('src', linkArrays[10]);
+      jQuery("#id12").attr('src', linkArrays[11]);
+    };
+
+    function clearActiveSizes() {
+      jQuery(".xs").removeClass("size_active");
+      jQuery(".s").removeClass("size_active");
+      jQuery(".m").removeClass("size_active");
+      jQuery(".l").removeClass("size_active");
+      jQuery(".xl").removeClass("size_active");
+      jQuery(".xxl").removeClass("size_active");
+    }
+
+    function activateSize(size) {
+      clearActiveSizes();
+      switch (size) {
+        case 'xs':
+          jQuery('.xs').addClass("size_active");
+          break;
+        case 's':
+          jQuery('.s').addClass("size_active");
+          break;
+        case 'm':
+          jQuery('.m').addClass("size_active");
+          break;
+        case 'l':
+          jQuery('.l').addClass("size_active");
+          break;
+        case 'xl':
+          jQuery('.xl').addClass("size_active");
+          break;
+        case 'xxl':
+          jQuery('.xxl').addClass("size_active");
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    function createRevArrays() {
+      var linkTransfer = Array.from(ogLinkArrays);
+      revLinkArrays = Array.from(linkTransfer.reverse().slice(1, linkTransfer.length));
+      revLinkArrays.push(linkTransfer[0]);
+
+      var nameTransfer = Array.from(ogNameArrays);
+      revNameArrays = Array.from(nameTransfer.reverse().slice(1, nameTransfer.length));
+      revNameArrays.push(nameTransfer[0]);
+
+      var descTransfer = Array.from(ogDescArray);
+      revDescArray = Array.from(descTransfer.reverse().slice(1, descTransfer.length));
+      revDescArray.push(descTransfer[0]);
+    }
+
+    function setPgNo(totalDress) {
+      var range = totalDress / 12; //12 is no of cards per page
+      if (range == Math.floor(range)) {
+        // Its an Integer no. 
+        range = parseInt(range);
+      } else {
+        //Its a decimal no
+        range = parseInt(range + 1); //add 1 to the range and remove the decimal
+      }
+
+      if (range <= 7) {
+        lessThen12 = true;
+        jQuery("#pgElD1").hide();
+        jQuery("#pgElD2").hide();
+        for (var i = 1; i <= range; i++) {
+          var id = "#pgEl" + i;
+          jQuery(id).show();
+        }
+      } else {
+        jQuery("#pgElD1").hide();
+        for (var i = 1; i < 6; i++) {
+          var id = "#pgEl" + i;
+          jQuery(id).show();
+        }
+        jQuery("#pgEl6").text(range - 1).show();
+        jQuery("#pgEl7").text(range).show();
+      }
+    }
+
+    function activatePgNo(pgClicked) {
+      for (var i = 1; i <= 7; i++) {
+        var id = "#pgEl" + i;
+        if (i == pgClicked) {
+          if (jQuery(id).hasClass("active")) {
+            //do nothing
+          } else {
+            jQuery(id).addClass("active");
+          }
+        } else {
+          jQuery(id).removeClass("active");
+        }
+      }
+    }
+
+    function changeImages(pgNo) {
+      var editedPg = pgNo - 1;
+      var start = editedPg * 12;// 12 because there are 12 cards per page
+      var end = start + 12;
+      for (var i = 1; i <= 12; i++) {
+        var imgId = "#id" + i;
+        var loadingId = "#Lid" + i;
+        var cardId = "#cid" + i;
+        jQuery(imgId).hide();
+        jQuery(loadingId).show();
+        if (start >= linkArrays.length - 1) {
+          jQuery(imgId).attr('src', "commingSoon.png");
+          jQuery(cardId).css({ "cursor": "wait", "pointer-events": "none" });// to disable click
+        } else {
+          jQuery(imgId).attr('src', linkArrays[start]);
+          jQuery(cardId).css({ "cursor": "default", "pointer-events": "all" });
+        }
+        start++;
+      }
+    }
+
+    function cardClick(cardNo) {
+      var dressNo = (currentPage * 12) + cardNo;
+      jQuery(".prod_img").attr('src', linkArrays[dressNo - 1]).hide();
+      jQuery("#prod_title").text(nameArrays[dressNo - 1]);
+      jQuery(".prod_desc").text(descArray[dressNo - 1]);
+      jQuery(".flex_gallery").hide();
+      jQuery(".product_info").show();
+    }
+
+    function showLoading() {
+      jQuery("#id1").hide();
+      jQuery("#Lid1").show();
+
+      jQuery("#id2").hide();
+      jQuery("#Lid2").show();
+
+      jQuery("#id3").hide();
+      jQuery("#Lid3").show();
+
+      jQuery("#id4").hide();
+      jQuery("#Lid4").show();
+
+      jQuery("#id5").hide();
+      jQuery("#Lid5").show();
+
+      jQuery("#id6").hide();
+      jQuery("#Lid6").show();
+
+      jQuery("#id7").hide();
+      jQuery("#Lid7").show();
+
+      jQuery("#id8").hide();
+      jQuery("#Lid8").show();
+
+      jQuery("#id9").hide();
+      jQuery("#Lid9").show();
+
+      jQuery("#id10").hide();
+      jQuery("#Lid10").show();
+
+      jQuery("#id11").hide();
+      jQuery("#Lid11").show();
+
+      jQuery("#id12").hide();
+      jQuery("#Lid12").show();
+
+    }
+
+    function orderDetails() {
+      if (jQuery('.size_active').attr('class') == undefined) {
+        alert("Plese Select Your Size");
+      } else {
+        setOrderDetails(jQuery(".prod_img").attr('src'), jQuery("#prod_title").text());
+        jQuery('#order_size').text("SIZE: " + jQuery(".size_active").text());
+        jQuery(".product_info").hide();
+        jQuery(".order_menu").show();
+      }
+    }
+
+    function setOrderDetails(imgUrl, title) {
+      jQuery(".order_img").attr('src', imgUrl);
+      jQuery("#order_title").text(title);
+    }
+
+    $(document).ready(() => {
+
+      $(".product_info").hide();
+
+      $(".cancle_btn").click(function () {
+        $(".product_info").hide();
+        clearActiveSizes();
+        jQuery(".flex_gallery").show();
+      });
+
+      $("#pgEl5").click(() => {
+        currentPage = Number($("#pgEl5").text()) - 1;
+        if (lessThen12) {
+          //do nothing
+          activatePgNo(5);
+          changeImages(5);
+        } else {
+          $("#pgElD1").show();
+
+          if ($("#pgEl5").hasClass("active")) {
+            //do not reload images
+          } else {
+            changeImages(Number($("#pgEl5").text()));
+          }
+
+          if ((Number($("#pgEl5").text()) + 1) == (Number($("#pgEl6").text()))) {
+            $("#pgElD2").hide();
+            activatePgNo(5);
+          } else {
+            $("#pgEl5").text(Number($("#pgEl5").text()) + 1);
+            $("#pgEl4").text(Number($("#pgEl4").text()) + 1);
+            $("#pgEl3").text(Number($("#pgEl3").text()) + 1);
+            activatePgNo(4);
+            if ((Number($("#pgEl5").text()) + 1) == (Number($("#pgEl6").text()))) {
+              $("#pgElD2").hide();
+            }
+          }
+        }
+      });
+
+      $("#pgEl3").click(() => {
+        currentPage = Number($("#pgEl3").text()) - 1;
+        if (lessThen12) {
+          //do nothing
+          activatePgNo(3);
+          changeImages(3);
+        } else {
+          $("#pgElD2").show();
+
+          if ($("#pgEl3").hasClass("active")) {
+            //do not reload images
+          } else {
+            changeImages(Number($("#pgEl3").text()));
+          }
+
+          if ((Number($("#pgEl3").text()) - 1) == (Number($("#pgEl2").text()))) {
+            $("#pgElD1").hide();
+            activatePgNo(3);
+          } else {
+            $("#pgEl3").text(Number($("#pgEl3").text()) - 1);
+            $("#pgEl4").text(Number($("#pgEl4").text()) - 1);
+            $("#pgEl5").text(Number($("#pgEl5").text()) - 1);
+            activatePgNo(4);
+            if ((Number($("#pgEl3").text()) - 1) == (Number($("#pgEl2").text()))) {
+              $("#pgElD1").hide();
+            }
+          }
+        }
+      });
+
+      $("#pgEl2").click(() => {
+        currentPage = Number($("#pgEl2").text()) - 1;
+        if ($("#pgEl2").hasClass("active")) {
+          //do not reload images
+        } else {
+          changeImages(2);
+        }
+
+        if (lessThen12) {
+          //do nothing
+        } else {
+          $("#pgElD1").hide();
+          $("#pgElD2").show();
+          $("#pgEl5").text(5);
+          $("#pgEl4").text(4);
+          $("#pgEl3").text(3);
+        }
+        activatePgNo(2);
+      });
+
+      $("#pgEl1").click(() => {
+        currentPage = Number($("#pgEl1").text()) - 1;
+        if ($("#pgEl1").hasClass("active")) {
+          //do not reload images
+        } else {
+          changeImages(1);
+        }
+
+        if (lessThen12) {
+          //do nothing
+        } else {
+          $("#pgElD1").hide();
+          $("#pgElD2").show();
+          $("#pgEl5").text(5);
+          $("#pgEl4").text(4);
+          $("#pgEl3").text(3);
+        }
+        activatePgNo(1);
+      });
+
+      $("#pgEl6").click(() => {
+        currentPage = Number($("#pgEl6").text()) - 1;
+        if ($("#pgEl6").hasClass("active")) {
+          //do not reload images
+        } else {
+          changeImages(Number($("#pgEl6").text()));
+        }
+        $("#pgElD2").hide();
+        $("#pgElD1").show();
+        $("#pgEl5").text(Number($("#pgEl6").text()) - 1);
+        $("#pgEl4").text(Number($("#pgEl6").text()) - 2);
+        $("#pgEl3").text(Number($("#pgEl6").text()) - 3);
+        activatePgNo(6);
+      });
+
+      $("#pgEl7").click(() => {
+        currentPage = Number($("#pgEl7").text()) - 1;
+        if ($("#pgEl7").hasClass("active")) {
+          //do not reload images
+        } else {
+          changeImages(Number($("#pgEl7").text()));
+        }
+        $("#pgElD2").hide();
+        $("#pgElD1").show();
+        $("#pgEl5").text(Number($("#pgEl6").text()) - 1);
+        $("#pgEl4").text(Number($("#pgEl6").text()) - 2);
+        $("#pgEl3").text(Number($("#pgEl6").text()) - 3);
+        activatePgNo(7);
+      });
+
+      $("#pgEl4").click(() => {
+        currentPage = Number($("#pgEl4").text()) - 1;
+        if ($("#pgEl4").hasClass("active")) {
+          //do not reload images
+        } else {
+          changeImages(Number($("#pgEl4").text()));
+        }
+        activatePgNo(4);
+      });
+
+      //--------------------------------------IMAGE LOADING FUNCTIONS--------------------------------------------
+      $("#id1").on('load', () => {
+        $("#id1").show();
+        $("#Lid1").hide();
+      });
+
+      $("#id2").on('load', () => {
+        $("#id2").show();
+        $("#Lid2").hide();
+      });
+
+      $("#id3").on('load', () => {
+        $("#id3").show();
+        $("#Lid3").hide();
+      });
+
+      $("#id4").on('load', () => {
+        $("#id4").show();
+        $("#Lid4").hide();
+      });
+
+      $("#id5").on('load', () => {
+        $("#id5").show();
+        $("#Lid5").hide();
+      });
+
+      $("#id6").on('load', () => {
+        $("#id6").show();
+        $("#Lid6").hide();
+      });
+
+      $("#id7").on('load', () => {
+        $("#id7").show();
+        $("#Lid7").hide();
+      });
+
+      $("#id8").on('load', () => {
+        $("#id8").show();
+        $("#Lid8").hide();
+      });
+
+      $("#id9").on('load', () => {
+        $("#id9").show();
+        $("#Lid9").hide();
+      });
+
+      $("#id10").on('load', () => {
+        $("#id10").show();
+        $("#Lid10").hide();
+      });
+
+      $("#id11").on('load', () => {
+        $("#id11").show();
+        $("#Lid11").hide();
+      });
+
+      $("#id12").on('load', () => {
+        $("#id12").show();
+        $("#Lid12").hide();
+      });
+
+      $(".prod_img").on('load', () => {
+        $("#Lid0").hide();
+        $(".prod_img").show();
+      });
+      //-------------------------------------------------------------------------------------------------------------
+
+      //------------------------------------------FILTERS-----------------------------------------------------------
+      $("#old").on('click', () => {
+        if ($("#old").hasClass("toggleActive")) {
+          //do nothing
+        } else {
+          $("#new").removeClass('toggleActive');
+          $("#old").addClass('toggleActive');
+          linkArrays = Array.from(ogLinkArrays);
+          nameArrays = Array.from(ogNameArrays);
+          descArray = Array.from(ogDescArray);
+          showLoading();
+          addSrcToImg();
+          $("#pgEl1").click();
+        }
+      });
+
+      $("#new").on('click', () => {
+        if ($("#new").hasClass("toggleActive")) {
+          //do nothing
+        } else {
+          $("#old").removeClass('toggleActive');
+          $("#new").addClass('toggleActive');
+          linkArrays = Array.from(revLinkArrays);
+          nameArrays = Array.from(revNameArrays);
+          descArray = Array.from(revDescArray);
+          showLoading();
+          addSrcToImg();
+          $("#pgEl1").click();
+        }
+      });
+
+      //-------------------------------------------------------------------------------------------------------------
+
+      //------------------------------------------ORDER FUNCTIONS-----------------------------------------
+
+      $("#copyBtn").on("click", () => {
+        var textToCopy = "Dress Name: " + $("#order_title").text() + " " + $("#order_size").text();
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(textToCopy).select();
+        document.execCommand("copy");
+        $temp.remove();
+        alert("Order Details Copied!");
+      });
+
+      $("#whatsappBtn").on('click', () => {
+        orderBtn = "whatsapp";
+        $(".userBox").show();
+      });
+
+      $("#mailBtn").on('click', () => {
+        orderBtn = "mail";
+        $(".userBox").show();
+      });
+
+      $("#cancleBtn").on('click', () => {
+        orderBtn = "none";
+        $(".userBox").hide();
+      });
+
+      $("#okBtn").on('click', () => {
+        if (!$("#userName").val()) {
+          //It is empty
+          alert("Please Enter Your Name");
+        } else {
+          if (orderBtn == "whatsapp") {
+            orderBtn = "none";
+            $(".userBox").hide();
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+              var dressDetails = "Hey, My name is " + $("#userName").val() + " I have ordered%0a" + "Dress Name: " + $("#order_title").text() + "%0a" + $("#order_size").text();//%0a is to create a line break;
+              var link = "https://wa.me/+918806811804?text=" + dressDetails;
+              $("#orderVia").attr('href', link);
+              document.getElementById('orderVia').click();
+            } else {
+              var dressDetails = "Hey, My name is " + $("#userName").val() + " I have ordered%0a" + "Dress Name: " + $("#order_title").text() + "%0a" + $("#order_size").text();
+              var link = "https://web.whatsapp.com/send?phone=+918806811804&text=" + dressDetails;
+              $("#orderVia").attr('href', link);
+              document.getElementById('orderVia').click();
+            }
+          } else if (orderBtn == "mail") {
+            var dressDetails = "Hey, My name is " + $("#userName").val() + " I have ordered%0a" + "Dress Name: " + $("#order_title").text() + "%0a" + $("#order_size").text();//%0a is to create a line break;
+            var link = "mailto:abc@example.com?Subject=Order Details&body=" + dressDetails;
+            $("#orderVia").attr('href', link);
+            orderBtn = "none";
+            $(".userBox").hide();
+            document.getElementById('orderVia').click();
+          } else {
+            alert("Something went Wromg! Please try again");
+          }
+        }
+      });
+
+      //-----------------------------------------------------------------------------------------------------------
+
+
+      //------To PREVENT OPENING OF MENU WHEN RIGHT CLICK IN DESKTOP BROWSER AND LONG PRESS IN MOBILE BROWSER--------
+      window.oncontextmenu = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+      //-------------------------------------------------------------------------------------------------------------
+
+      $(".order_cancle_btn").on('click', () => {
+        $(".order_menu").hide();
+        $(".flex_gallery").show();
+        clearActiveSizes();
+        $(".order_img").attr('src', 'loading6.gif');
+      });
+
+      $("#copyBtn").on("click", () => {
+        var textToCopy = "Dress Name: " + $("#order_title").text() + " " + $("#order_size").text();
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(textToCopy).select();
+        document.execCommand("copy");
+        $temp.remove();
+        alert("Order Details Copied!");
+      });
+
+    });
+
+
+  </script>
+
+  <div class="userBox" style=" display: none;">
+    <div class="userContainer">
+      <lottie-player id="lottieStyle" src="https://assets9.lottiefiles.com/packages/lf20_pivt1poq.json"
+        background="transparent" speed="1" loop autoplay></lottie-player>
+      <div class="userInput">
+        <input id="userName" type="text" placeholder="Enter Your Name">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 1vmax;">
+          <button id="cancleBtn">Cancle</button>
+          <button id="okBtn">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="order_menu" style="display: none;">
+    <div class="order_float"></div>
+    <div class="order_contailer">
+      <svg class="order_cancle_btn" xmlns="http://www.w3.org/2000/svg" width="408" height="408" viewBox="0 0 408 408">
+        <g id="cancle_btn" transform="translate(-795 -219)">
+          <g id="outCir" transform="translate(818 242)" fill="#d91111" stroke="#fff" stroke-width="23">
+            <circle cx="181" cy="181" r="181" stroke="none" />
+            <circle cx="181" cy="181" r="192.5" fill="none" />
+          </g>
+          <rect id="crossStroke2" width="38" height="235" rx="19" transform="translate(1072.65 324.98) rotate(45)"
+            fill="#fff" />
+          <rect id="crossStroke1" width="38" height="235" rx="19" transform="translate(906.48 351.85) rotate(-45)"
+            fill="#fff" />
+        </g>
+      </svg>
+      <h1
+        style="text-align: center; font-size: 3vmax; padding-left: 7%; position: relative; z-index: 0; color: white; border-radius: 2vmax 2vmax 0 0; background-color: #00000069;">
+        You Ordered</h1>
+
+      <img class="order_img" src="loading6.gif">
+
+      <div style="background-color: #00000069">
+        <h2 id="order_title"
+          style="text-align: center; font-size: 2vmax; position: relative; color: white; border-radius: 2vmax 2vmax 0 0;">
+          Title</h2>
+        <h3 id="order_size"
+          style="text-align: center; font-size: 2vmax; position: relative; color: white; font-weight: 300;">
+          SIZE: M</h3>
+
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin-top: 1vmax;">
+
+          <button id="mailBtn" class="orderFinalStyle" style="background-color: #06388d;">
+            <div id="mailText" class="orderFinalText" style="background-color:#4486f6;">
+              <img class="orderFinalImg" src="mail_logo.png" align="left">
+              <span>Order Via Mail</span>
+            </div>
+          </button>
+
+          <button id="whatsappBtn" class="orderFinalStyle">
+            <div id="whatsappText" class="orderFinalText">
+              <img class="orderFinalImg" src="WhatsApp_Logo_1.png" align="left">
+              <span>Order Via Whatsapp</span>
+            </div>
+          </button>
+        </div>
+
+        <a id="orderVia" style="display: none;"
+          href="https://web.whatsapp.com/send?phone=+918806811804&amp;text=Dress Name: A-Line Skirt SIZE: S"
+          target="_blank">.</a>
+
+        <button id="copyBtn" class="btnCopyStyle"><i class="fa fa-copy"
+            style="font-family: 'Lato', sans-serif ,'FontAwesome';"> COPY ORDER DETAILS</i></button>
+      </div>
+
+      <h3 class="howTo">HOW TO ORDER?
+        <span style="display: block;">Copy the order details & Send an E-mail to <span
+            style="color: white;">xyz@gmail.com</span> or send a
+          Whatsapp message on <span style="color: white;">9359192032</span> with the copied order details.</span>
+      </h3>
+
+    </div>
+  </div>
+
+  <div class="product_info" style="display: none;">
+    <div class="product_float"></div>
+    <div class="prod_container">
+      <svg class="cancle_btn" xmlns="http://www.w3.org/2000/svg" width="408" height="408" viewBox="0 0 408 408">
+        <g id="cancle_btn" transform="translate(-795 -219)">
+          <g id="outCir" transform="translate(818 242)" fill="#d91111" stroke="#fff" stroke-width="23">
+            <circle cx="181" cy="181" r="181" stroke="none" />
+            <circle cx="181" cy="181" r="192.5" fill="none" />
+          </g>
+          <rect id="crossStroke2" width="38" height="235" rx="19" transform="translate(1072.65 324.98) rotate(45)"
+            fill="#fff" />
+          <rect id="crossStroke1" width="38" height="235" rx="19" transform="translate(906.48 351.85) rotate(-45)"
+            fill="#fff" />
+        </g>
+      </svg>
+      <img id="Lid0"
+        style="position: absolute; margin-left: 50%; margin-top: 20vh; transform: translate(-50%, -50%); width: 10vmax;"
+        src="loading6.gif" width="initial">
+      <img class="prod_img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt>
+      <h2 style="text-align: center; font-size: 4vmax; color: #1f1f1f;" id="prod_title">This is a tree</h2>
+      <p class="prod_desc">Thor: Love and Thunder is an upcoming American superhero film based on the Marvel Comics
+        character Thor, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures. It is
+        intended to be the direct sequel to Thor: Ragnarok and the 29th film in the Marvel Cinematic Universe.</p>
+      <div style="width: fit-content; margin-left: 50%; transform: translateX(-50%);">
+        <h3
+          style="color: #1f1f1f; margin-top: 1vmax; margin-bottom: 0.5vmax; font-size: 1.5vmax; font-family: 'Lato', sans-serif;">
+          SELECT SIZE:</h3>
+        <button onclick="activateSize('xs')" class="xs clothes_size">XS</button>
+        <button onclick="activateSize('s')" class="s clothes_size">S</button>
+        <button onclick="activateSize('m')" class="m clothes_size">M</button>
+        <button onclick="activateSize('l')" class="l clothes_size">L</button>
+        <button onclick="activateSize('xl')" class="xl clothes_size">XL</button>
+        <button onclick="activateSize('xxl')" class="xxl clothes_size">XXL</button>
+      </div>
+      <button id="order" style="margin-left: 44.5vw; transform: translateX(-50%); margin-top: 3vh; position: relative;">
+        <div class="order_txt noselect" onclick="orderDetails()">ORDER NOW</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="top_bg noselect">
+    <ul>
+      <li><a href="#">CONTACT</a></li>
+      <li><a href="#">ABOUT</a></li>
+      <li><a href="#" class="active">GALLERY</a></li>
+      <li><a href="index.html">HOME</a></li>
+      <li>
+        <h3 class="title noselect">IMRARE.IN</h3>
+      </li>
+    </ul>
+  </div>
+  <div class="sorting_container">
+    <p style="color: white; text-align: center; font-size: 2.2vmax;">Currently Showing:</p>
+    <button id="old" class="toggleBtn toggleActive">Oldest First</button>
+    <button id="new" class="toggleBtn">Newest First</button>
+  </div>
+
+  <div class="flex_gallery">
+    <div id="cid1" class="card card_disable" onclick="cardClick(1)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id1" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid1" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid2" class="card card_disable" onclick="cardClick(2)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id2" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid2" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid3" class="card card_disable" onclick="cardClick(3)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id3" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid3" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid4" class="card card_disable" onclick="cardClick(4)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id4" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid4" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid5" class="card card_disable" onclick="cardClick(5)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id5" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid5" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid6" class="card card_disable" onclick="cardClick(6)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id6" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid6" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid7" class="card card_disable" onclick="cardClick(7)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id7" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid7" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid8" class="card card_disable" onclick="cardClick(8)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id8" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid8" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid9" class="card card_disable" onclick="cardClick(9)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id9" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid9" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid10" class="card card_disable" onclick="cardClick(10)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id10" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid10" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid11" class="card card_disable" onclick="cardClick(11)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id11" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid11" class="loading_img"
+        src="loading6.gif"></div>
+    <div id="cid12" class="card card_disable" onclick="cardClick(12)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id12" class="card_img"
+        src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid12" class="loading_img"
+        src="loading6.gif"></div>
+  </div>
+
+  <div class="page_no">
+    <a id="pgEl1" class="pgNo_style hide active" href="#">1</a>
+    <a id="pgEl2" class="pgNo_style hide" href="#">2</a>
+    <p id="pgElD1" class="pgNo_style hide" style="display: inline;">...</p>
+    <a id="pgEl3" class="pgNo_style hide" href="#">3</a>
+    <a id="pgEl4" class="pgNo_style hide" href="#">4</a>
+    <a id="pgEl5" class="pgNo_style hide" href="#">5</a>
+    <p id="pgElD2" class="pgNo_style hide" style="display: inline;">...</p>
+    <a id="pgEl6" class="pgNo_style hide" href="#">6</a>
+    <a id="pgEl7" class="pgNo_style hide" href="#">7</a>
+  </div>
+
+  <div class="footer">
+    <img class="logo_img" src="logo.png">
+    <h1 class="brand_name">IMRARE
+      <span class="divider"></span>
+      <div style="display: inline-block; margin-left: 5vmax;">
+        <ul class="footer_nav">
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="#" style="color: white;">GALLERY</a></li>
+          <li><a href="#">ABOUT</a></li>
+          <li><a href="#">CONTACT US</a></li>
+        </ul>
+      </div>
+    </h1>
+  </div>
+
+</body>
+
+</html>
