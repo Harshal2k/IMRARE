@@ -224,6 +224,7 @@
       jQuery(".prod_desc").text(descArray[dressNo - 1]);
       jQuery(".flex_gallery").hide();
       jQuery(".product_info").show();
+      jQuery(".prod_container").addClass("container_anim");
     }
 
     function showLoading() {
@@ -273,6 +274,7 @@
         jQuery('#order_size').text("SIZE: " + jQuery(".size_active").text());
         jQuery(".product_info").hide();
         jQuery(".order_menu").show();
+        jQuery(".order_contailer").addClass("container_anim");
       }
     }
 
@@ -546,11 +548,13 @@
       $("#whatsappBtn").on('click', () => {
         orderBtn = "whatsapp";
         $(".userBox").show();
+        $(".userContainer").addClass("userBox_anim");
       });
 
       $("#mailBtn").on('click', () => {
         orderBtn = "mail";
         $(".userBox").show();
+        $(".userContainer").addClass("userBox_anim");
       });
 
       $("#cancleBtn").on('click', () => {
@@ -759,40 +763,40 @@
   </div>
 
   <div class="flex_gallery">
-    <div id="cid1" class="card card_disable" onclick="cardClick(1)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id1" class="card_img"
+    <div id="cid1" class="card card_disable" onclick="cardClick(1)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id1" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid1" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid2" class="card card_disable" onclick="cardClick(2)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id2" class="card_img"
+    <div id="cid2" class="card card_disable" onclick="cardClick(2)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id2" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid2" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid3" class="card card_disable" onclick="cardClick(3)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id3" class="card_img"
+    <div id="cid3" class="card card_disable" onclick="cardClick(3)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id3" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid3" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid4" class="card card_disable" onclick="cardClick(4)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id4" class="card_img"
+    <div id="cid4" class="card card_disable" onclick="cardClick(4)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id4" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid4" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid5" class="card card_disable" onclick="cardClick(5)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id5" class="card_img"
+    <div id="cid5" class="card card_disable" onclick="cardClick(5)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id5" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid5" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid6" class="card card_disable" onclick="cardClick(6)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id6" class="card_img"
+    <div id="cid6" class="card card_disable" onclick="cardClick(6)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id6" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid6" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid7" class="card card_disable" onclick="cardClick(7)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id7" class="card_img"
+    <div id="cid7" class="card card_disable" onclick="cardClick(7)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id7" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid7" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid8" class="card card_disable" onclick="cardClick(8)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id8" class="card_img"
+    <div id="cid8" class="card card_disable" onclick="cardClick(8)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id8" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid8" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid9" class="card card_disable" onclick="cardClick(9)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id9" class="card_img"
+    <div id="cid9" class="card card_disable" onclick="cardClick(9)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id9" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid9" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid10" class="card card_disable" onclick="cardClick(10)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id10" class="card_img"
+    <div id="cid10" class="card card_disable" onclick="cardClick(10)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id10" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid10" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid11" class="card card_disable" onclick="cardClick(11)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id11" class="card_img"
+    <div id="cid11" class="card card_disable" onclick="cardClick(11)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id11" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid11" class="loading_img"
         src="loading6.gif"></div>
-    <div id="cid12" class="card card_disable" onclick="cardClick(12)"><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id12" class="card_img"
+    <div id="cid12" class="card card_disable" onclick="cardClick(12)"><div class="glass"></div><div class="stage"></div><div class="stageBottom">IMRARE</div><h3 class="card_text">IMRARE</h3><img id="id12" class="card_img"
         src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="><img id="Lid12" class="loading_img"
         src="loading6.gif"></div>
   </div>
